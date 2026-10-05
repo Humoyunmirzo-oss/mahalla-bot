@@ -1,29 +1,11 @@
-name: Telegram Bot
+import telebot
 
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: "*/5 * * * *"
+TOKEN = "BU_YERGA_BOT_TOKENINGIZ"
 
-jobs:
-  run-bot:
-    runs-on: ubuntu-latest
+bot = telebot.TeleBot(TOKEN)
 
-    steps:
-      - name: Kodni yuklash
-        uses: actions/checkout@v4
+@bot.message_handler(commands=['start'])
+def start(message):
+    bot.reply_to(message, "Salom! Bot ishlayapti 🤖")
 
-      - name: Python o'rnatish
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Kutubxonalarni o'rnatish
-        run: |
-          pip install pyTelegramBotAPI
-
-      - name: Botni ishga tushirish
-        env:
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-        run: |
-          python bot.py
+bot.infinity_polling()
